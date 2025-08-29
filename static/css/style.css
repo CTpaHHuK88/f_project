@@ -1,0 +1,35 @@
+html{
+    height: 100vh;
+}
+body {
+    background-color: rgb(232, 224, 224);
+
+}
+
+header {
+    background-color: rgba(232, 224, 224, 8);
+    height: 30px;
+    display: flex;
+}
+
+main   {
+    width: 80vi;
+}
+
+.left-header    {
+    width: 33vi;
+}
+
+.center-header  {
+    width: 33vi;
+}
+
+.right-header   {
+    width: 33vi;
+    text-align: right;
+}
+
+.sidebar {
+    width: 20vi;
+}
+

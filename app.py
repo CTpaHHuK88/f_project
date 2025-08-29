@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, session, request
 import logging
 from models import UserBase
 from sqlalchemy.orm import Session
@@ -14,17 +14,21 @@ logging.info("Запуск программы")
 
 try:
     app = Flask(__name__)
+
+
     @app.route('/')
     def index_pa():
+        return 'Index page'
 
-        data = {
-            
-            'title': 'Home page',
-            'text': 'This is Flask app!!!'
-            }
-        return render_template('index.html', data=data)
-    
-    @app.route('/about')
+    @app.route('/login', methods=['GET', 'POST'])
+    def signin():
+        if request.method == 'POST':
+            login = request.form.get('login')
+            password = request.form.get('password')
+            return f"{login} \n {password}"
+        return render_template('login.html')
+        
+
     @app.route('/about/<name>')
     def about(name):
         if isinstance(name, str):

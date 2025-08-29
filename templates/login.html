@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>
+        {%block title%}
+
+        {%endblock%}
+    </title>
+</head>
+<body>
+<main>
+    <div class="login-form">
+        <form action="" method="post">
+        <label for="login_input">Login</label>
+        <input name="login" type="text" id="login_input" placeholder="Enter login">
+        <label for="password_input">Login</label>
+        <input name="password" type="password" id="password_input" placeholder="Enter password">
+        <button>Войти</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
