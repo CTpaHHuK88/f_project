@@ -34,6 +34,7 @@ try:
                 query_login = db.query(AuthBase).filter(AuthBase.login==login).first()
             if query_login and h_pasword == query_login.password:
                 session['access'] = 1
+                session['username'] = login
                 return redirect('/panel')
             else: 
                 return 'Логин или пароль введён неправильно!!!'
@@ -42,12 +43,16 @@ try:
     @app.route('/logout')
     def logout_panel():
         session.pop('access', None)
-        return redirect(('/'))
+        session.pop('username', None)
+        return redirect(('/login'))
     
     @app.route('/panel')
     def panel_admin():
-        if 'access' in session and session['access']==1:
-            return 'Панель администратора!'
+        data = {'title': 'Панель администратора',
+                'username':session['username']
+                }
+        if 'access' in session and session['access']==1:            
+            return render_template('panel.html',data=data)
         else: return redirect('/login')
         
     @app.route('/signup', methods=['GET', 'POST'])
