@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{%block title%}
+{{data.title}}
+{%endblock%}
+
+{%block content%}
+Hello, 
+
+{{data.username.name}}
+
+<br>
+{{data.text}}<br>
+Ваш возраст: {{data.age}}
+{%endblock%}
