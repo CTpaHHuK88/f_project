@@ -33,3 +33,6 @@ main   {
     width: 20vi;
 }
 
+.login-form input  {
+    margin-left: 30px;
+}

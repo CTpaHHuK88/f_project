@@ -1,9 +1,11 @@
 from flask import Flask
-from flask import render_template, session, request
+from flask import render_template, session, request, redirect, url_for
 import logging
-from models import UserBase
+from models import UserBase, AuthBase
 from sqlalchemy.orm import Session
 from session import engine
+from utils import hash_password
+from uuid import uuid4
 
 logging.basicConfig(
     level=logging.INFO, 
@@ -22,12 +24,50 @@ try:
 
     @app.route('/login', methods=['GET', 'POST'])
     def signin():
+        if session:
+            return redirect('/panel')
         if request.method == 'POST':
             login = request.form.get('login')
             password = request.form.get('password')
-            return f"{login} \n {password}"
+            h_pasword = hash_password(password)
+            with Session(autoflush=False, bind=engine) as db:
+                query_login = db.query(AuthBase).filter(AuthBase.login==login).first()
+            if query_login and h_pasword == query_login.password:
+                session['access'] = 1
+                return redirect('/panel')
+            else: 
+                return 'Логин или пароль введён неправильно!!!'
         return render_template('login.html')
+    
+    @app.route('/logout')
+    def logout_panel():
+        session.pop('access', None)
+        return redirect(('/'))
+    
+    @app.route('/panel')
+    def panel_admin():
+        if 'access' in session and session['access']==1:
+            return 'Панель администратора!'
+        else: return redirect('/login')
         
+    @app.route('/signup', methods=['GET', 'POST'])
+    def signup():
+        if request.method == 'POST':
+            login = request.form.get('login')
+            password = request.form.get('password')
+            email = request.form.get('email')
+
+            with Session(autoflush=False, bind=engine) as db:
+                values = AuthBase(
+                    login=login,
+                    password=hash_password(password),
+                    mail=email,
+                    status=1
+                    )
+                db.add(values)     # добавляем в бд
+                db.commit()     # сохраняем изменения
+                return redirect('/login')
+        return render_template('signup.html')
 
     @app.route('/about/<name>')
     def about(name):
@@ -46,5 +86,8 @@ except NameError as err:
     logging.error(err,exc_info=True)
 finally:
     #if __name__ == 'main':
+
+    app.secret_key = b"\xb0f\xe4+z,\xbd'\xd0\x89i\x92\xffF\xb9\x9d]\x1eP\x10\x986#\xfe"
     app.run(debug=True)
+
 
