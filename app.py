@@ -17,7 +17,6 @@ logging.info("Запуск программы")
 try:
     app = Flask(__name__)
 
-
     @app.route('/')
     def index_pa():
         return 'Index page'
@@ -35,15 +34,18 @@ try:
             if query_login and h_pasword == query_login.password:
                 session['access'] = 1
                 session['username'] = login
+                logging.info(f"Удачная попытка входа {login}")
                 return redirect('/panel')
             else: 
+                logging.warning(f"Неудачная попытка входа {login}")
                 return 'Логин или пароль введён неправильно!!!'
         return render_template('login.html')
     
     @app.route('/logout')
     def logout_panel():
+        logging.info(f"Пользователь {session['username']} вышел из системы.")
         session.pop('access', None)
-        session.pop('username', None)
+        session.pop('username', None)        
         return redirect(('/login'))
     
     @app.route('/panel')
@@ -90,8 +92,6 @@ try:
 except NameError as err:
     logging.error(err,exc_info=True)
 finally:
-    #if __name__ == 'main':
-
     app.secret_key = b"\xb0f\xe4+z,\xbd'\xd0\x89i\x92\xffF\xb9\x9d]\x1eP\x10\x986#\xfe"
     app.run(debug=True)
 
