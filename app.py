@@ -89,6 +89,32 @@ try:
                 }
         return render_template('index.html', data=data)
   
+    @app.route('/settings')
+    def settings():
+        data = {'title': 'Настройки',
+        'username':session['username']
+        }
+        if 'access' in session and session['access']==1:    
+            return render_template('/settings/set.html', data=data)
+        
+        if request.method == 'POST':
+            return 
+    
+    
+    @app.route('/users')
+    def users():
+        with Session(autoflush=False, bind=engine) as db:
+            query_login = db.query(AuthBase).all()
+        data = {'title': 'Управление пользователями',
+        'username':session['username'],
+        'list':query_login
+        }
+        if 'access' in session and session['access']==1:    
+            return render_template('/users/users.html', data=data)
+        
+        if request.method == 'POST':
+            return 
+
 except NameError as err:
     logging.error(err,exc_info=True)
 finally:

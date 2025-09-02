@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{%block content%}
+<table>
+    <caption>Список пользователей.</caption>
+        <thead>
+            <tr>
+                <th scope="col">Login</th>
+                <th scope="col">Role</th>
+                <th scope="col">Edit</th>
+            </tr>            
+        </thead>
+        {%for i in data.list%}
+        <tr>
+            <td>{{i.login}}</td>
+            <td>{{i.mail}}</td>
+            <td>{{i.status}}</td>
+        </tr>
+        {%endfor%}
+</table>
+{%endblock%}

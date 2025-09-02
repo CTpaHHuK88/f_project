@@ -11,13 +11,23 @@
     </title>
 </head>
 <body>
-<header>
 {%block header%}
-{%endblock%}
+<header>
+    <div class="left-header">
+        <a href="/panel">Главная</a>
+        </div>
+    <div class="center-header"></div>
+    <div class="right-header">
+        {{ data.username }}<br>
+        <a href="/logout">Выход</a>
+    </div>
 </header>
+{%endblock%}
 <main>
     <div class="sidebar">
-
+        <h3>Управление</h3>
+        <a href="/settings">Настройки</a><br>
+        <a href="/users">Пользователи</a>
     </div>
     <div class="content">
     {%block content%}
